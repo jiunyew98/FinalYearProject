@@ -16,6 +16,7 @@ public class EnrollFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_enroll,container,false);
 
+
         return v;
     }
 }

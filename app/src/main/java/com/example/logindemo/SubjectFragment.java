@@ -16,7 +16,6 @@ public class SubjectFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_subject,container,false);
 
-
         return v;
     }
 }
