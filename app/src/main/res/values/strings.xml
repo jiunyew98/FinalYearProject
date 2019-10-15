@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Logindemo</string>
+
+    //Login
+    <string name="etEmail">Email</string>
+    //supposedly username
+    <string name="etPassword">Password</string>
+    <string name="btnLogin">Login</string>
+    <string name="tvinfo">No. of incorrect attempts :</string>
+    <string name="tvRegister">New User? Sign Up Here</string>
+    <string name="tvForgotPassword">Forgot Password ?</string>
+
+    <string name="tvSecondActivity">This is Second Activity.</string>
+    <string name="btnLogout">Logout</string>
+
+    //Registration
+    <string name="etUserName">Username</string>
+    <string name="etUserPassword">Password (minimum 6 characters)</string>
+    <string name="etUserEmail">Email</string>
+    <string name="btnRegister">Register</string>
+    <string name="tvUserLogin">Already Signed Up? Log In Here</string>
+    <string name="etAge">Age</string>
+
+    //ForgotPassword
+    <string name="btnResetPassword">Reset Password</string>
+    <string name="todo">TODO</string>
+
+    //User Profile
+    <string name="tvProfileName">Name : </string>
+    <string name="tvProfileAge">Age : </string>
+    <string name="tvProfileEmail">Email : </string>
+    <string name="btnProfileUpdate">Edit</string>
+    <string name="btnChangePassword">Change Password</string>
+    <string name="btnSave">Save</string>
+
+    //Update Password
+    <string name ="etNewPassword">New Password</string>
+    <string name ="btnUpdatePassword">Update</string>
+
+    <string name ="navigation_drawer_open">Open Navigation drawer</string>
+    <string name ="navigation_drawer_close">Close Navigation drawer</string>
+
+</resources>
