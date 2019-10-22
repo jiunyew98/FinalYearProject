@@ -31,6 +31,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 
+import static com.example.logindemo.KeyTag.STUDENT_KEY;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     private EditText userName;
@@ -181,29 +183,26 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
-    private void sendUserData(){
+    private void sendUserData() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = firebaseDatabase.getReference(firebaseAuth.getUid());
-        StorageReference imageReference = storageReference.child(firebaseAuth.getUid()).child("Images").child("Profile Pic"); //UUID/Images/ProfilePic
+        DatabaseReference myRef = firebaseDatabase.getReference(KeyTag.USERS_KEY).child(STUDENT_KEY);
+        StorageReference imageReference = storageReference.child(firebaseAuth.getUid())
+                .child("Images").child("Profile Pic");
         UploadTask uploadTask = imageReference.putFile(imagePath);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
                 Toast.makeText(RegistrationActivity.this, "Upload Failed", Toast.LENGTH_SHORT).show();
-
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                Toast.makeText(RegistrationActivity.this, "Successfully Uploaded!", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(RegistrationActivity.this, "Upload Successful", Toast.LENGTH_SHORT).show();
             }
         });
-        UserProfile userProfile = new UserProfile(age, email, name); // follow the correct sequence, as shown in UserProfile Class.
-
-        myRef.setValue(userProfile);
+        UserProfile userProfile = new UserProfile(age, email, name);
+        myRef.child(firebaseAuth.getUid()).setValue(userProfile);
+        myRef.push();
     }
 
 

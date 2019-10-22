@@ -5,6 +5,7 @@ public class UserProfile {
     public String userAge;
     public String userEmail;
     public String userName;
+    public Boolean isLecturer;
 
     public UserProfile(){
 
@@ -17,6 +18,8 @@ public class UserProfile {
         this.userEmail = userEmail;
         this.userName = userName;
         this.userAge = userAge;
+        this.isLecturer = false;
+
 
     }
 
@@ -42,5 +45,13 @@ public class UserProfile {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public Boolean getLecturer() {
+        return isLecturer;
+    }
+
+    public void setLecturer(Boolean lecturer) {
+        isLecturer = lecturer;
     }
 }

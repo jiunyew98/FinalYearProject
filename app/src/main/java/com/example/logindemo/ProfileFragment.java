@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
 
-        DatabaseReference databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid());
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(firebaseAuth.getUid());
 
         StorageReference storageReference = firebaseStorage.getReference();
         storageReference.child(firebaseAuth.getUid()).child("Images/Profile Pic").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -73,12 +73,10 @@ public class ProfileFragment extends Fragment {
                 profileAge.setText("Age : " + userProfile.getUserAge());
                 profileEmail.setText("Email : " + userProfile.getUserEmail());
 
-                Log.i("###",  userProfile.getUserName());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.i("###",  String.valueOf(databaseError.getCode()));
                 Toast.makeText(getContext(), databaseError.getCode(), Toast.LENGTH_SHORT).show();
 
             }
