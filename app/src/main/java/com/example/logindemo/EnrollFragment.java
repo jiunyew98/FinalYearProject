@@ -29,7 +29,7 @@ public class EnrollFragment extends Fragment {
 
         String[] listview = {"Subject 1","Subject 2","Subject 3"};
 
-        ListView listView = (ListView) v.findViewById(R.id.listview);
+        ListView listView = (ListView) v.findViewById(R.id.EnrollListView);
 
         ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
 
