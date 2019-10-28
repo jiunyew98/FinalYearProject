@@ -10,29 +10,33 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.example.logindemo.adapter.SubjectAdapter;
+import com.example.logindemo.model.SubjectParent;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 public class SubjectFragment extends Fragment {
 
+    private ArrayList<SubjectParent> subjectParentArrayList = new ArrayList<>();
+    private SubjectAdapter subjectAdapter;
     ListView listView;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_subject,container,false);
+        View v = inflater.inflate(R.layout.fragment_subject, container, false);
 
-        String[] listview = {"Subject 1","Subject 2","Subject 3"};
-
-        ListView listView = (ListView) v.findViewById(R.id.SubjectListView);
-
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
-
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                listview
-        );
-
-        listView.setAdapter(listViewAdapter);
+        listView = (ListView) v.findViewById(R.id.SubjectListView);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -42,6 +46,35 @@ public class SubjectFragment extends Fragment {
             }
         });
 
+        getSubjectData();
         return v;
+    }
+
+
+
+    private void getSubjectData() {
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(FirebaseAuth.getInstance().getUid());
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                subjectParentArrayList.clear();
+                if (userProfile.getSubjectParentArrayList() != null)
+                    for (String postSnapshot : userProfile.getSubjectParentArrayList()) {
+                        subjectParentArrayList.add(new Gson().fromJson(postSnapshot, SubjectParent.class));
+                    }
+
+                subjectAdapter = new SubjectAdapter(getContext(), subjectParentArrayList,null);
+                listView.setAdapter(subjectAdapter);
+                subjectAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(), databaseError.getCode(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

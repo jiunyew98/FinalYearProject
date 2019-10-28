@@ -1,23 +1,33 @@
 package com.example.logindemo;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.logindemo.adapter.SubjectAdapter;
+import com.example.logindemo.model.SubjectParent;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class EnrollFragment extends Fragment {
 
-
+    private ArrayList<SubjectParent> subjectParentArrayList = new ArrayList<>();
+    private SubjectAdapter subjectAdapter;
     ListView listView;
+    private UserProfile userProfile;
 
 
     @Nullable
@@ -26,44 +36,58 @@ public class EnrollFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_enroll,container,false);
 
+        listView = (ListView) v.findViewById(R.id.EnrollListView);
 
-        String[] listview = {"Subject 1","Subject 2","Subject 3"};
+        getUserData();
+        return v;
+    }
 
-        ListView listView = (ListView) v.findViewById(R.id.EnrollListView);
+    private void getUserData(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(FirebaseAuth.getInstance().getUid());
 
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(
-
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                listview
-        );
-
-        listView.setAdapter(listViewAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userProfile = dataSnapshot.getValue(UserProfile.class);
+                getData();
+            }
 
-                openDialog();
-
-
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getContext(), error.getCode(), Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
 
+    private void getData(){
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.SUBJECT_KEY);
 
-        return v;
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                subjectParentArrayList.clear();
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    for (DataSnapshot childSnapshot: postSnapshot.getChildren()) {
 
+                        SubjectParent university = childSnapshot.getValue(SubjectParent.class);
+                        university.setLecturerId(postSnapshot.getKey());
+                        subjectParentArrayList.add(university);
+                    }
+                }
 
+                subjectAdapter = new SubjectAdapter(getContext(), subjectParentArrayList,userProfile);
+                listView.setAdapter(subjectAdapter);
+                subjectAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getContext(), error.getCode(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
-    public void openDialog(){
 
-        EnrollDialog enrollDialog = new EnrollDialog();
-        enrollDialog.show(getFragmentManager(), "Dialog Example" );
-
-
-    }
 }

@@ -1,11 +1,16 @@
 package com.example.logindemo;
 
+import com.example.logindemo.model.SubjectParent;
+
+import java.util.ArrayList;
+
 public class UserProfile {
 
     public String userAge;
     public String userEmail;
     public String userName;
     public Boolean isLecturer;
+    public ArrayList<String> subjectParentArrayList;
 
     public UserProfile(){
 
@@ -53,5 +58,13 @@ public class UserProfile {
 
     public void setLecturer(Boolean lecturer) {
         isLecturer = lecturer;
+    }
+
+    public ArrayList<String> getSubjectParentArrayList() {
+        return subjectParentArrayList;
+    }
+
+    public void setSubjectParentArrayList(ArrayList<String> subjectParentArrayList) {
+        this.subjectParentArrayList = subjectParentArrayList;
     }
 }
