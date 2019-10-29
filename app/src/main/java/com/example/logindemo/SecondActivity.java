@@ -100,8 +100,8 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                navprofileName.setText("Name : " + userProfile.getUserName());
-                navprofileEmail.setText("Email : " + userProfile.getUserEmail());
+                navprofileName.setText( userProfile.getUserName());
+                navprofileEmail.setText( userProfile.getUserEmail());
 
             }
 
