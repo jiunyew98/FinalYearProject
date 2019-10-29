@@ -1,6 +1,7 @@
 package com.example.logindemo;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,21 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 
 public class SecondActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -21,6 +35,10 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     private FirebaseAuth firebaseAuth;
     private Button logout;
     private DrawerLayout drawer;
+    private ImageView navprofilePic;
+    private TextView navprofileName, navprofileEmail;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseStorage firebaseStorage;
 
 
     @Override
@@ -56,6 +74,43 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        navprofilePic = (ImageView) findViewById(R.id.NavProfilePic);
+        navprofileName = (TextView) findViewById(R.id.NavProfileName);
+        navprofileEmail = (TextView) findViewById(R.id.NavProfileEmail);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseStorage = FirebaseStorage.getInstance();
+
+        DatabaseReference databaseReference = firebaseDatabase.getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(firebaseAuth.getUid());
+
+        StorageReference storageReference = firebaseStorage.getReference();
+        storageReference.child(firebaseAuth.getUid()).child("Images/Profile Pic").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                //Load the image to image View using picasso.
+                Picasso.get().load(uri).fit().centerCrop().into(navprofilePic);
+
+            }
+        });
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                navprofileName.setText("Name : " + userProfile.getUserName());
+                navprofileEmail.setText("Email : " + userProfile.getUserEmail());
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(null, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         Fragment fragment = null;
         switch (item.getItemId()){
