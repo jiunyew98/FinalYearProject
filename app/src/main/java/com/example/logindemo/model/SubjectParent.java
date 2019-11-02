@@ -3,12 +3,14 @@ package com.example.logindemo.model;
 import com.example.logindemo.UserProfile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SubjectParent {
     private String id;
     private String lecturerId;
     private String title;
     private ArrayList<Notes> notesArrayList;
+    private HashMap<String, QuizParent> quiz;
     private ArrayList<UserProfile> studentArrayList;
 
     public SubjectParent() {
@@ -58,5 +60,13 @@ public class SubjectParent {
 
     public void setLecturerId(String lecturerId) {
         this.lecturerId = lecturerId;
+    }
+
+    public HashMap<String, QuizParent> getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(HashMap<String, QuizParent> quiz) {
+        this.quiz = quiz;
     }
 }

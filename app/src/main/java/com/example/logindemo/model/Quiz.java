@@ -1,14 +1,30 @@
 package com.example.logindemo.model;
 
 public class Quiz {
-    private String title;
+    public String question;
+    public Boolean answer;
 
-
-    public String getTitle() {
-        return title;
+    public Quiz() {
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public Quiz(String question, Boolean answer) {
+        this.question = question;
+        this.answer = answer;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public Boolean getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(Boolean answer) {
+        this.answer = answer;
     }
 }

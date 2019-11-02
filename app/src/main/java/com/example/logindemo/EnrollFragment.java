@@ -7,11 +7,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.logindemo.adapter.SubjectAdapter;
+import com.example.logindemo.model.QuizParent;
 import com.example.logindemo.model.SubjectParent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class EnrollFragment extends Fragment {
 
@@ -72,6 +73,7 @@ public class EnrollFragment extends Fragment {
 
                         SubjectParent university = childSnapshot.getValue(SubjectParent.class);
                         university.setLecturerId(postSnapshot.getKey());
+
                         subjectParentArrayList.add(university);
                     }
                 }

@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.logindemo.adapter.SubjectAdapter;
+import com.example.logindemo.model.QuizParent;
 import com.example.logindemo.model.SubjectParent;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -61,7 +62,8 @@ public class SubjectFragment extends Fragment {
                 subjectParentArrayList.clear();
                 if (userProfile.getSubjectParentArrayList() != null)
                     for (String postSnapshot : userProfile.getSubjectParentArrayList()) {
-                        subjectParentArrayList.add(new Gson().fromJson(postSnapshot, SubjectParent.class));
+                        SubjectParent subjectParent = new Gson().fromJson(postSnapshot, SubjectParent.class);
+                        subjectParentArrayList.add(subjectParent);
                     }
 
                 subjectAdapter = new SubjectAdapter(getContext(), subjectParentArrayList,null);

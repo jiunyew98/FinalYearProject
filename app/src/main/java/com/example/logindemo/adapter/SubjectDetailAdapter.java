@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.logindemo.R;
 import com.example.logindemo.model.Notes;
 import com.example.logindemo.model.Quiz;
+import com.example.logindemo.model.QuizParent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
 
     private List<String> mData;
     private List<Notes> notesList = new ArrayList<>();
-    private List<Quiz> quizList = new ArrayList<>();
+    private List<QuizParent> quizList = new ArrayList<>();
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
@@ -28,7 +29,7 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
 
 
     // data is passed into the constructor
-    public SubjectDetailAdapter(Context context, ArrayList<Notes> notesList, ArrayList<Quiz> quizList) {
+    public SubjectDetailAdapter(Context context, ArrayList<Notes> notesList, ArrayList<QuizParent> quizList) {
         this.mInflater = LayoutInflater.from(context);
         this.notesList = notesList;
         this.quizList = quizList;
@@ -63,7 +64,7 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
             }
         } else {
             if (position > notesList.size()) {
-                text = quizList.get(position - (notesList.size() == 0 ? 1 : notesList.size() + 1)).getTitle();
+                text = quizList.get(position - (notesList.size() == 0 ? 1 : notesList.size() + 2)).getTitle();
             } else {
                 text = notesList.get(position - 1).getNote();
             }
@@ -92,7 +93,7 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
                 total += notesList.size() + 1;
             }
 
-            if (quizList.size() != 0) {
+            if (quizList != null && quizList.size() != 0) {
                 total += quizList.size() + 1;
             }
 
