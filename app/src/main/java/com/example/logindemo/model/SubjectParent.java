@@ -12,6 +12,7 @@ public class SubjectParent {
     private ArrayList<Notes> notesArrayList;
     private HashMap<String, QuizParent> quiz;
     private ArrayList<UserProfile> studentArrayList;
+    private ArrayList<UserAnswer> userAnswers;
 
     public SubjectParent() {
     }
@@ -68,5 +69,13 @@ public class SubjectParent {
 
     public void setQuiz(HashMap<String, QuizParent> quiz) {
         this.quiz = quiz;
+    }
+
+    public ArrayList<UserAnswer> getUserAnswers() {
+        return userAnswers;
+    }
+
+    public void setUserAnswers(ArrayList<UserAnswer> userAnswers) {
+        this.userAnswers = userAnswers;
     }
 }

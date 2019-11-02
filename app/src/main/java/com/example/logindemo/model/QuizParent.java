@@ -1,11 +1,14 @@
 package com.example.logindemo.model;
 
+import com.example.logindemo.UserProfile;
+
 import java.util.ArrayList;
 
 public class QuizParent {
     private String id;
     private String title;
     private ArrayList<Quiz> quizArrayList;
+    private ArrayList<UserProfile> userProfileArrayList;
 
     public QuizParent() {
     }

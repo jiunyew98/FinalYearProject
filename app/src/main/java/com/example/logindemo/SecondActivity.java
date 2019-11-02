@@ -98,10 +98,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                navprofileName.setText( userProfile.getUserName());
-                navprofileEmail.setText( userProfile.getUserEmail());
+                Singleton.getInstance().userProfile = dataSnapshot.getValue(UserProfile.class);
+                navprofileName.setText( Singleton.getInstance().userProfile.getUserName());
+                navprofileEmail.setText( Singleton.getInstance().userProfile.getUserEmail());
 
             }
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/submitQuizButton">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title :"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/titleET"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:hint="Title..."
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:padding="16dp"/>
+
+            <LinearLayout
+                android:id="@+id/parentLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </LinearLayout>
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/submitQuizButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="SUBMIT"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:padding="16dp"
+        android:gravity="center"/>
+
+</RelativeLayout>
