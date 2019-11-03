@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -16,15 +17,20 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.logindemo.adapter.SubjectDetailAdapter;
 import com.example.logindemo.model.Quiz;
 import com.example.logindemo.model.QuizParent;
 import com.example.logindemo.model.SubjectParent;
 import com.example.logindemo.model.UserAnswer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FacebookAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
@@ -65,26 +71,12 @@ public class QuizDetailActivity extends AppCompatActivity {
             subjectParent = new Gson().fromJson(getIntent().getStringExtra(SUBJECT_KEY), SubjectParent.class);
 
             titleET.setText(quizParent.getTitle());
+
             for(int a= 0; a<quizParent.getQuizArrayList().size(); a++){
                 addLayout(quizParent.getQuizArrayList().get(a));
             }
 
-//            for(int b= 0; a<quizParent.getQuizArrayList().size(); a++){
-//                        RadioGroup radioGroup = childViewList.get(b).findViewById(R.id.radioAnswer);
-//                        childViewList.get(b).findViewById(R.id.radioTrue).setEnabled(false);
-//                        childViewList.get(b).findViewById(R.id.radioFalse).setEnabled(false);
-//                        radioGroup.check(quizParent.getQuizArrayList().get(b).answer ? R.id.radioTrue : R.id.radioFalse);
-//                        radioGroup.setEnabled(false);
-//
-//                    }
-
-//            for(int a = 0; a< Singleton.getInstance().userProfile.getSubjectParentArrayList().size(); a++){
-//                SubjectParent subjectParent = new Gson().fromJson(Singleton.getInstance().userProfile.getSubjectParentArrayList().get(a), SubjectParent.class);
-//                if(subjectParent.getId().equals(this.subjectParent.getId())){
-//
-//                    submitQuizButton.setVisibility(View.GONE);
-//                }
-//            }
+            getQuizDetail();
         }
     }
 
@@ -98,6 +90,37 @@ public class QuizDetailActivity extends AppCompatActivity {
 
         childViewList.add(createQuizChild);
         parentLayout.addView(createQuizChild);
+    }
+
+    void getQuizDetail(){
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.SUBJECT_KEY).child(subjectParent.getLecturerId()).child(subjectParent.getId())
+                .child(KeyTag.QUIZ_KEY).child(quizParent.getId()).child(KeyTag.ANSWER_KEY).child(FirebaseAuth.getInstance().getUid());
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserAnswer data = dataSnapshot.getValue(UserAnswer.class);
+
+                if(data != null){
+                    submitQuizButton.setVisibility(View.GONE);
+
+                    for (int b = 0; b < data.getAnswerQuizList().size(); b++) {
+                        RadioGroup radioGroup = childViewList.get(b).findViewById(R.id.radioAnswer);
+                        childViewList.get(b).findViewById(R.id.radioTrue).setEnabled(false);
+                        childViewList.get(b).findViewById(R.id.radioFalse).setEnabled(false);
+                        radioGroup.check(data.getAnswerQuizList().get(b).answer ? R.id.radioTrue : R.id.radioFalse);
+                        radioGroup.setEnabled(false);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(null, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void sendUserData() {
