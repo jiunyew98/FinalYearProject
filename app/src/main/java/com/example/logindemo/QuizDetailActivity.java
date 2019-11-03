@@ -130,7 +130,9 @@ public class QuizDetailActivity extends AppCompatActivity {
             View childView = childViewList.get(a);
             String question = ((TextView)childView.findViewById(R.id.questionET)).getText().toString();
             Boolean answer = ((RadioGroup) childView.findViewById(R.id.radioAnswer)).getCheckedRadioButtonId() == R.id.radioTrue;
-            quizList.add(new Quiz(question,answer));
+
+            Boolean studentAnswer = answer == quizParent.getQuizArrayList().get(a).answer;
+            quizList.add(new Quiz(question,answer,studentAnswer));
         }
         UserAnswer quizParent = new UserAnswer(FirebaseAuth.getInstance().getUid(),Singleton.getInstance().userProfile.userName,quizList);
         myRef.child(quizParent.getId()).setValue(quizParent);
