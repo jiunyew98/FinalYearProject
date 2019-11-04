@@ -19,6 +19,8 @@
         <activity android:name=".UpdateProfile" />
         <activity android:name=".PasswordActivity" />
         <activity android:name=".RegistrationActivity" />
+        <activity android:name=".LecturerChatDetailActivity" />
+        <activity android:name=".LecturerUsersDetailActivity" />
         <activity android:name=".SecondActivity" />
         <activity android:name=".SubjectDetailActivity" />
         <activity

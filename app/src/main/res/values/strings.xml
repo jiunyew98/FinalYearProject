@@ -40,4 +40,6 @@
     <string name ="navigation_drawer_open">Open Navigation drawer</string>
     <string name ="navigation_drawer_close">Close Navigation drawer</string>
 
+    <string name ="no_users_found">No Users Found</string>
+
 </resources>

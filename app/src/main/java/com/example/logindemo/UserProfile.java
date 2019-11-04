@@ -8,7 +8,8 @@ public class UserProfile {
 
     public String userAge;
     public String userEmail;
-    public String userName;
+    public String userName = "";
+    public String chatWith = "";
     public Boolean isLecturer;
     public ArrayList<String> subjectParentArrayList;
 
@@ -44,12 +45,21 @@ public class UserProfile {
         this.userEmail = userEmail;
     }
 
+
     public String getUserName() {
         return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getChatWith() {
+        return chatWith;
+    }
+
+    public void setChatWith(String chatWith) {
+        this.chatWith = chatWith;
     }
 
     public Boolean getLecturer() {

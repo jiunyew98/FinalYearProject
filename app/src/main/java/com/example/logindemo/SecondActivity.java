@@ -141,6 +141,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
                 break;
 
+            case R.id.nav_chat:
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ChatFragment()).addToBackStack(null).commit();
+
+                break;
+
             case R.id.nav_LogOut:
 
                 Logout();
