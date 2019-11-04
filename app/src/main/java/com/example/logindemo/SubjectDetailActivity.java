@@ -61,8 +61,11 @@ public class SubjectDetailActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                SubjectParent data = dataSnapshot.getValue(SubjectParent.class);
                 ArrayList<QuizParent> quizParents = new ArrayList<>();
-                for(String key : data.getQuiz().keySet()){
-                    quizParents.add(data.getQuiz().get(key));
+
+                if(data.getQuiz()!=null) {
+                    for (String key : data.getQuiz().keySet()) {
+                        quizParents.add(data.getQuiz().get(key));
+                    }
                 }
 
                 data.setLecturerId(subjectParent.getLecturerId());

@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 public class QuizParent {
     private String id;
+    private String subjectId;
     private String title;
     private ArrayList<Quiz> quizArrayList;
     private ArrayList<UserProfile> userProfileArrayList;
@@ -15,8 +16,9 @@ public class QuizParent {
     public QuizParent() {
     }
 
-    public QuizParent(String title, String id, ArrayList<Quiz> quizArrayList) {
+    public QuizParent(String title, String id,String subjectId, ArrayList<Quiz> quizArrayList) {
         this.id = id;
+        this.subjectId =subjectId;
         this.quizArrayList = quizArrayList;
         this.title = title;
     }
@@ -59,5 +61,21 @@ public class QuizParent {
 
     public void setAnswers(HashMap<String, UserAnswer> answers) {
         this.answer = answers;
+    }
+
+    public String getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(String subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    public HashMap<String, UserAnswer> getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(HashMap<String, UserAnswer> answer) {
+        this.answer = answer;
     }
 }

@@ -8,14 +8,24 @@ public class UserAnswer {
     private String id;
     private String username;
     private ArrayList<Quiz> answerQuizList;
+    private Integer totalCorrect;
 
     public UserAnswer() {
     }
 
-    public UserAnswer(String id, String username, ArrayList<Quiz> answerQuizList) {
+    public UserAnswer(String id, String username, ArrayList<Quiz> answerQuizList, Integer totalCorrect) {
         this.id = id;
         this.username = username;
         this.answerQuizList = answerQuizList;
+        this.totalCorrect = totalCorrect;
+    }
+
+    public Integer getTotalCorrect() {
+        return totalCorrect;
+    }
+
+    public void setTotalCorrect(Integer totalCorrect) {
+        this.totalCorrect = totalCorrect;
     }
 
     public String getId() {

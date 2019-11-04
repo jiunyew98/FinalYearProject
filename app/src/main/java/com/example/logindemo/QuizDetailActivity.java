@@ -1,8 +1,11 @@
 package com.example.logindemo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -124,6 +127,7 @@ public class QuizDetailActivity extends AppCompatActivity {
     }
 
     private void sendUserData() {
+        int counter = 0;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference(KeyTag.SUBJECT_KEY).child(subjectParent.getLecturerId()).child(subjectParent.getId()).child(KeyTag.QUIZ_KEY).child(quizParent.getId()).child(KeyTag.ANSWER_KEY);
         for (int a= 0 ; a< childViewList.size() ; a++){
@@ -132,15 +136,48 @@ public class QuizDetailActivity extends AppCompatActivity {
             Boolean answer = ((RadioGroup) childView.findViewById(R.id.radioAnswer)).getCheckedRadioButtonId() == R.id.radioTrue;
 
             Boolean studentAnswer = answer == quizParent.getQuizArrayList().get(a).answer;
+
+            if(studentAnswer){
+                counter += 1;
+            }
+
             quizList.add(new Quiz(question,answer,studentAnswer));
         }
-        UserAnswer quizParent = new UserAnswer(FirebaseAuth.getInstance().getUid(),Singleton.getInstance().userProfile.userName,quizList);
+        UserAnswer quizParent = new UserAnswer(FirebaseAuth.getInstance().getUid(),Singleton.getInstance().userProfile.userName,quizList,counter);
         myRef.child(quizParent.getId()).setValue(quizParent);
         myRef.push();
 
-        setResult(RESULT_OK);
-        finish();
-        Toast.makeText(QuizDetailActivity.this, "Create Successful", Toast.LENGTH_SHORT).show();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            new AlertDialog.Builder(QuizDetailActivity.this)
+                    .setTitle("")
+                    .setMessage("You've got " + counter + " out of " + this.quizParent.getQuizArrayList().size() + " question correct !" )
+
+                    // Specifying a listener allows you to take an action before dismissing the dialog.
+                    // The dialog is automatically dismissed when a dialog button is clicked.
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+
+                    // A null listener allows the button to dismiss the dialog and take no further action.
+                    .setNegativeButton("", null)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            setResult(RESULT_OK);
+                            finish();
+                            Toast.makeText(QuizDetailActivity.this, "Create Successful", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .show();
+        }else{
+            setResult(RESULT_OK);
+            finish();
+            Toast.makeText(QuizDetailActivity.this, "Create Successful", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void setupDetail(){

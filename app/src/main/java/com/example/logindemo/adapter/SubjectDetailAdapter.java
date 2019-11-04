@@ -65,24 +65,25 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
 
         holder.itemView.setOnClickListener(null);
         if (getItemViewType(position) == TITLE_TYPE) {
-            if (position == 0) {
+            if (notesList != null && position == 0) {
                 text = "Notes";
             } else {
                 text = "Quiz";
             }
         } else {
-            if (position > notesList.size()) {
-                final QuizParent quizParent = quizList.get(position - (notesList.size() == 0 ? 1 : notesList.size() + 2));
+            if (notesList == null || position > notesList.size()) {
+                final QuizParent quizParent = notesList != null ? quizList.get(position - (notesList.size() == 0 ? 1 : notesList.size() + 2)) :
+                        quizList.get(position - 1);
                 text = quizParent.getTitle();
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        context.startActivity(QuizDetailActivity.newInstance(context,subjectParent,quizParent));
+                        context.startActivity(QuizDetailActivity.newInstance(context, subjectParent, quizParent));
                     }
                 });
             } else {
-                text = notesList.get(position - 1).getNote();
+                text =  notesList.get(position - 1).getNote();
             }
         }
 
@@ -92,7 +93,7 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
     @Override
     public int getItemViewType(int position) {
         Log.d("###", "item view type " + position);
-        if (position == 0 || position == notesList.size() + 1) {
+        if (position == 0 || (notesList != null && position == notesList.size() + 1)) {
             return TITLE_TYPE;
         } else {
             return DESC_TYPE;
@@ -102,10 +103,10 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
     // total number of rows
     @Override
     public int getItemCount() {
-        if (notesList.size() != 0 || quizList.size() != 0) {
+        if ((notesList != null && notesList.size() != 0) || (quizList != null && quizList.size() != 0)) {
             int total = 0;
 
-            if (notesList.size() != 0) {
+            if (notesList != null && notesList.size() != 0) {
                 total += notesList.size() + 1;
             }
 
