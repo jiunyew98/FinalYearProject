@@ -26,6 +26,7 @@ import java.util.ArrayList;
 public class ChatFragment extends Fragment {
 
     private TextView LecturerButton;
+    private TextView StudentButton;
 
 
     @Nullable
@@ -39,6 +40,15 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), LecturerUsersDetailActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        StudentButton = v.findViewById(R.id.StudentButton);
+        StudentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), StudentUsersDetailActivity.class);
                 startActivity(intent);
             }
         });

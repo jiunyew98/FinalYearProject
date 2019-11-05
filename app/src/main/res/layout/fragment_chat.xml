@@ -15,4 +15,15 @@
         android:layout_alignParentLeft="true"
         android:layout_margin="16dp"/>
 
+    <TextView
+        android:id="@+id/StudentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Student Chat"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"/>
+
 </RelativeLayout>

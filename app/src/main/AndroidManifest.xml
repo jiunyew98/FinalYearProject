@@ -21,6 +21,8 @@
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".LecturerChatDetailActivity" />
         <activity android:name=".LecturerUsersDetailActivity" />
+        <activity android:name=".StudentChatDetailActivity" />
+        <activity android:name=".StudentUsersDetailActivity" />
         <activity android:name=".SecondActivity" />
         <activity android:name=".SubjectDetailActivity" />
         <activity
