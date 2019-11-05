@@ -148,6 +148,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
                 break;
 
+            case R.id.nav_progress:
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ProgressFragment()).addToBackStack(null).commit();
+
+                break;
+
             case R.id.nav_LogOut:
 
                 Logout();

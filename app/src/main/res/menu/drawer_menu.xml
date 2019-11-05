@@ -26,9 +26,16 @@
             android:title="Enroll"/>
 
         <item
+            android:id="@+id/nav_progress"
+            android:icon="@drawable/ic_progress"
+            android:title="Progress"/>
+
+        <item
             android:id="@+id/nav_chat"
             android:icon="@drawable/ic_message_black_24dp"
             android:title="Chat"/>
+
+
 
         <item android:title="Logout">
             <menu>
