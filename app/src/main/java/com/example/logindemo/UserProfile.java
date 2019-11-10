@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class UserProfile {
 
+    public String userId;
     public String userAge;
     public String userEmail;
     public String userName = "";
@@ -27,6 +28,14 @@ public class UserProfile {
         this.isLecturer = false;
 
 
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getUserAge() {

@@ -59,7 +59,7 @@ public class EnrollDialog extends AppCompatDialogFragment {
                     if (subjectParent.getStudentArrayList() == null) {
                         subjectParent.setStudentArrayList(new ArrayList<UserProfile>());
                     }
-
+                    userProfile.setUserId(FirebaseAuth.getInstance().getUid());
                     subjectParent.getStudentArrayList().add(userProfile);
 
                     myRef.child(subjectParent.getId()).setValue(subjectParent);
