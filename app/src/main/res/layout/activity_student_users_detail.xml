@@ -11,15 +11,16 @@
     tools:context=".StudentUsersDetailActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/no_users_found"
-        android:id="@+id/noUsersText"
-        android:visibility="gone"/>
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/usersList"/>
+
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/no_users_found"
+    android:id="@+id/noUsersText"
+    android:visibility="gone"/>
+
 </LinearLayout>

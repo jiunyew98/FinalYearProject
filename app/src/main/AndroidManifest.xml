@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UpdatePassword"></activity>
+        <activity android:name=".UpdatePassword"
+            android:label="Update Password"/>
         <activity android:name=".UpdateProfile" />
         <activity android:name=".PasswordActivity" />
         <activity android:name=".RegistrationActivity" />
@@ -23,7 +24,8 @@
         <activity android:name=".LecturerUsersDetailActivity" />
         <activity android:name=".StudentChatDetailActivity" />
         <activity android:name=".StudentUsersDetailActivity" />
-        <activity android:name=".SecondActivity" />
+        <activity android:name=".SecondActivity"
+            android:label="Main Page"/>
         <activity android:name=".SubjectDetailActivity" />
         <activity
             android:name=".MainActivity"
