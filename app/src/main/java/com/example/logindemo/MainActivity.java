@@ -49,11 +49,10 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         //Checks with the database if user has already logged in or not.
 
-        if (user != null ) { //Use != null when need to allow the phone to access second activity instantly without log in(if user has already logged in).
-            finish();
-            startActivity(new Intent(MainActivity.this, SecondActivity.class));
-
-        }
+//        if (user != null ) { //Use != null when need to allow the phone to access second activity instantly without log in(if user has already logged in).
+//            finish();
+//            startActivity(new Intent(MainActivity.this, SecondActivity.class));
+//        }
 
 
 
