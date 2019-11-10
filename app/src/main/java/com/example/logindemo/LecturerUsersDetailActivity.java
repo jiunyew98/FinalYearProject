@@ -83,19 +83,18 @@ public class LecturerUsersDetailActivity extends AppCompatActivity {
                 key = i.next().toString();
                 UserProfile userProfile = new Gson().fromJson(obj.get(key).toString(), UserProfile.class);
 
-                if(!key.equals(Singleton.getInstance().userProfile.userName)) {
+                if(!userProfile.getUserName().equals(Singleton.getInstance().userProfile.userName)) {
                     al.add(userProfile.userName);
                     keyList.add(key);
+                    totalUsers++;
                 }
-
-                totalUsers++;
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if(totalUsers <=1){
+        if(totalUsers < 1){
             noUsersText.setVisibility(View.VISIBLE);
             usersList.setVisibility(View.GONE);
         }
