@@ -80,6 +80,10 @@ public class QuizProgressActivity extends Activity {
 
                 SubjectParent university = dataSnapshot.getValue(SubjectParent.class);
 
+                if(university.getQuiz() ==null){
+                    Toast.makeText(QuizProgressActivity.this, "No quiz for currently", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 for (String key : university.getQuiz().keySet()) {
                     if (university.getQuiz().get(key).getAnswers() != null && university.getQuiz().get(key).getAnswers().containsKey(FirebaseAuth.getInstance().getUid())) {
                         UserAnswer userAnswer = university.getQuiz().get(key).getAnswers().get(FirebaseAuth.getInstance().getUid());

@@ -39,7 +39,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
     private TextView navprofileName, navprofileEmail;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseStorage firebaseStorage;
-
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
@@ -63,21 +63,13 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
             navigationView.setCheckedItem(R.id.nav_feed);
         }
 
+        navprofilePic = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.NavProfilePic);
+        navprofileName = (TextView)  navigationView.getHeaderView(0).findViewById(R.id.NavProfileName);
+        navprofileEmail = (TextView)  navigationView.getHeaderView(0).findViewById(R.id.NavProfileEmail);
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         loadFragment(new FeedFragment());
-
-
-
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        navprofilePic = (ImageView) findViewById(R.id.NavProfilePic);
-        navprofileName = (TextView) findViewById(R.id.NavProfileName);
-        navprofileEmail = (TextView) findViewById(R.id.NavProfileEmail);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -110,6 +102,11 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
             }
         });
+
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         Fragment fragment = null;
         switch (item.getItemId()){
@@ -163,6 +160,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
 
         }
 
+        navigationView.setCheckedItem(item.getItemId());
         drawer.closeDrawer(GravityCompat.START);
         return loadFragment(fragment);
     }
