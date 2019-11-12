@@ -40,7 +40,7 @@ import java.util.HashMap;
 
 public class QuizProgressActivity extends Activity {
 
-    public static String QUIZ_KEY = "QUIZ_KEY";
+    public static String SUBJECT_KEY = "SUBJECT_KEY";
     public static String LECTURER_KEY = "LECTURER_KEY";
 
     private ArrayList<SubjectParent> subjectParentArrayList = new ArrayList<>();
@@ -53,7 +53,7 @@ public class QuizProgressActivity extends Activity {
 
     public static Intent newInstance(Context context, String lecturerId, String subjectId) {
         Intent intent = new Intent(context, QuizProgressActivity.class);
-        intent.putExtra(QUIZ_KEY, subjectId);
+        intent.putExtra(SUBJECT_KEY, subjectId);
         intent.putExtra(LECTURER_KEY, lecturerId);
         return intent;
     }
@@ -62,7 +62,7 @@ public class QuizProgressActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_progress);
-        subjectId = getIntent().getStringExtra(QUIZ_KEY);
+        subjectId = getIntent().getStringExtra(SUBJECT_KEY);
         lecturerId = getIntent().getStringExtra(LECTURER_KEY);
         barChart = findViewById(R.id.barchart);
 
@@ -71,32 +71,52 @@ public class QuizProgressActivity extends Activity {
 
 
     private void getData() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.SUBJECT_KEY).child(lecturerId).child(subjectId);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.SUBJECT_KEY).child(lecturerId).child(subjectId).child(KeyTag.QUIZ_KEY);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                subjectParentArrayList.clear();
 
-                SubjectParent university = dataSnapshot.getValue(SubjectParent.class);
+//                SubjectParent university = dataSnapshot.getValue(SubjectParent.class);
+//
+//                if(university.getQuiz() ==null){
+//                    Toast.makeText(QuizProgressActivity.this, "No quiz for currently", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                for (String key : university.getQuiz().keySet()) {
+//                    if (university.getQuiz().get(key).getAnswers() != null && university.getQuiz().get(key).getAnswers().containsKey(FirebaseAuth.getInstance().getUid())) {
+//                        UserAnswer userAnswer = university.getQuiz().get(key).getAnswers().get(FirebaseAuth.getInstance().getUid());
+//                        subjectMarksArrayList.put(key, userAnswer);
+//                        titleMarksArrayList.put(key, university.getQuiz().get(key).getTitle());
+//                    } else {
+//                        if (!subjectMarksArrayList.containsKey(university.getId())) {
+//                            UserAnswer existMark = new UserAnswer();
+//                            existMark.setTotalCorrect(0);
+//                            existMark.setAnswerQuizList(new ArrayList<Quiz>());
+//                            subjectMarksArrayList.put(key, existMark);
+//                            titleMarksArrayList.put(key, university.getQuiz().get(key).getTitle());
+//                        }
+//                    }
+//                }
 
-                if(university.getQuiz() ==null){
-                    Toast.makeText(QuizProgressActivity.this, "No quiz for currently", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                for (String key : university.getQuiz().keySet()) {
-                    if (university.getQuiz().get(key).getAnswers() != null && university.getQuiz().get(key).getAnswers().containsKey(FirebaseAuth.getInstance().getUid())) {
-                        UserAnswer userAnswer = university.getQuiz().get(key).getAnswers().get(FirebaseAuth.getInstance().getUid());
-                        subjectMarksArrayList.put(key, userAnswer);
-                        titleMarksArrayList.put(key, university.getQuiz().get(key).getTitle());
-                    } else {
-                        if (!subjectMarksArrayList.containsKey(university.getId())) {
-                            UserAnswer existMark = new UserAnswer();
-                            existMark.setTotalCorrect(0);
-                            existMark.setAnswerQuizList(new ArrayList<Quiz>());
-                            subjectMarksArrayList.put(key, existMark);
-                            titleMarksArrayList.put(key, university.getQuiz().get(key).getTitle());
+                for(DataSnapshot quizSnapshot : dataSnapshot.getChildren()){
+                    QuizParent quizParent = quizSnapshot.getValue(QuizParent.class);
+
+                    for(DataSnapshot answerSnapShot : quizSnapshot.child("answer").getChildren()){
+                        UserAnswer quiz = answerSnapShot.getValue(UserAnswer.class);
+                        if (quiz.getId().equals(FirebaseAuth.getInstance().getUid())) {
+                            subjectMarksArrayList.put(quizParent.getId(), quiz);
+                            titleMarksArrayList.put(quizParent.getId(), quizParent.getTitle());
+                        } else {
+                            if (!subjectMarksArrayList.containsKey(quizParent.getId())) {
+                                UserAnswer existMark = new UserAnswer();
+                                existMark.setTotalCorrect(0);
+                                existMark.setAnswerQuizList(new ArrayList<Quiz>());
+                                subjectMarksArrayList.put(quizParent.getId(), existMark);
+                                titleMarksArrayList.put(quizParent.getId(), quizParent.getTitle());
+                            }
                         }
+
                     }
                 }
 

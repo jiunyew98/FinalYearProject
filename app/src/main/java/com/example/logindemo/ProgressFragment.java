@@ -52,6 +52,7 @@ import java.util.Map;
 public class ProgressFragment extends Fragment {
 
     private ArrayList<SubjectParent> subjectParentArrayList = new ArrayList<>();
+    private HashMap<String,String> quizHashMap= new HashMap<>();
     private HashMap<String,UserAnswer> subjectMarksArrayList= new HashMap<>();
     private HashMap<String,SubjectParent> subjectWithMarksArrayList = new HashMap<>();
     private ArrayList<String> quizWithMarksArrayList = new ArrayList<>();
@@ -107,6 +108,7 @@ public class ProgressFragment extends Fragment {
                                         existMark.setAnswerQuizList(total);
                                         subjectMarksArrayList.put(university.getId(), existMark);
                                     }
+                                    quizHashMap.put(university.getId(), quizParent.getId());
                                 } else {
 
                                     if (!subjectMarksArrayList.containsKey(university.getId())) {
@@ -115,53 +117,10 @@ public class ProgressFragment extends Fragment {
                                         existMark.setAnswerQuizList(new ArrayList<Quiz>());
                                         subjectMarksArrayList.put(university.getId(), existMark);
                                         subjectWithMarksArrayList.put(university.getId(), university);
+                                        quizHashMap.put(university.getId(), quizParent.getId());
                                     }
                                 }
 
-                            }
-                        }
-
-                        if (university.getQuiz() != null) {
-
-//                            for (String key : university.getQuiz().keySet()) {
-//                                if()
-//                                if (university.getQuiz().get(key).getAnswers() != null && university.getQuiz().get(key).getAnswers().containsKey(FirebaseAuth.getInstance().getUid())) {
-//                                    UserAnswer userAnswer = university.getQuiz().get(key).getAnswers().get(FirebaseAuth.getInstance().getUid());
-//
-//                                    if (!subjectMarksArrayList.containsKey(university.getId())) {
-//                                        UserAnswer existMark = new UserAnswer();
-//                                        existMark.setTotalCorrect(userAnswer.getTotalCorrect());
-//                                        existMark.setAnswerQuizList(userAnswer.getAnswerQuizList());
-//                                        subjectMarksArrayList.put(university.getId(), existMark);
-//                                        subjectWithMarksArrayList.put(university.getId(), university);
-//                                    } else {
-//                                        UserAnswer existMark = subjectMarksArrayList.get(university.getId());
-//                                        int marks = existMark.getTotalCorrect() + userAnswer.getTotalCorrect();
-//                                        ArrayList<Quiz> total = existMark.getAnswerQuizList();
-//                                        total.addAll(userAnswer.getAnswerQuizList());
-//                                        existMark.setTotalCorrect(marks);
-//                                        existMark.setAnswerQuizList(total);
-//                                        subjectMarksArrayList.put(university.getId(), existMark);
-//                                    }
-//                                } else {
-//
-//                                    if (!subjectMarksArrayList.containsKey(university.getId())) {
-//                                        UserAnswer existMark = new UserAnswer();
-//                                        existMark.setTotalCorrect(0);
-//                                        existMark.setAnswerQuizList(new ArrayList<Quiz>());
-//                                        subjectMarksArrayList.put(university.getId(), existMark);
-//                                        subjectWithMarksArrayList.put(university.getId(), university);
-//                                    }
-//                                }
-//                            }
-                        }else {
-
-                            if (!subjectMarksArrayList.containsKey(university.getId())) {
-                                UserAnswer existMark = new UserAnswer();
-                                existMark.setTotalCorrect(0);
-                                existMark.setAnswerQuizList(new ArrayList<Quiz>());
-                                subjectMarksArrayList.put(university.getId(), existMark);
-                                subjectWithMarksArrayList.put(university.getId(), university);
                             }
                         }
                     }
@@ -216,7 +175,8 @@ public class ProgressFragment extends Fragment {
         barChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-                getContext().startActivity(QuizProgressActivity.newInstance(getContext(),subjectWithMarksArrayList.get(quizWithMarksArrayList.get(e.getXIndex())).getLecturerId(),quizWithMarksArrayList.get(e.getXIndex())));
+                getContext().startActivity(QuizProgressActivity.newInstance(getContext(),
+                        subjectWithMarksArrayList.get(quizWithMarksArrayList.get(e.getXIndex())).getLecturerId(),quizWithMarksArrayList.get(e.getXIndex())));
             }
 
             @Override
