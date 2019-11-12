@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -84,25 +85,24 @@ public class ProgressFragment extends Fragment {
 
                         SubjectParent university = childSnapshot.getValue(SubjectParent.class);
                         university.setLecturerId(postSnapshot.getKey());
-
                         subjectParentArrayList.add(university);
+                        for(DataSnapshot quizSnapshot : postSnapshot.child(university.getId()).child("quiz").getChildren()){
+                            QuizParent quizParent = quizSnapshot.getValue(QuizParent.class);
 
-                        if (university.getQuiz() != null) {
-                            for (String key : university.getQuiz().keySet()) {
-                                if (university.getQuiz().get(key).getAnswers() != null && university.getQuiz().get(key).getAnswers().containsKey(FirebaseAuth.getInstance().getUid())) {
-                                    UserAnswer userAnswer = university.getQuiz().get(key).getAnswers().get(FirebaseAuth.getInstance().getUid());
-
+                            for(DataSnapshot answerSnapShot : quizSnapshot.child("answer").getChildren()){
+                                UserAnswer quiz = answerSnapShot.getValue(UserAnswer.class);
+                                if (quiz.getId().equals(FirebaseAuth.getInstance().getUid())) {
                                     if (!subjectMarksArrayList.containsKey(university.getId())) {
                                         UserAnswer existMark = new UserAnswer();
-                                        existMark.setTotalCorrect(userAnswer.getTotalCorrect());
-                                        existMark.setAnswerQuizList(userAnswer.getAnswerQuizList());
+                                        existMark.setTotalCorrect(quiz.getTotalCorrect());
+                                        existMark.setAnswerQuizList(quiz.getAnswerQuizList());
                                         subjectMarksArrayList.put(university.getId(), existMark);
                                         subjectWithMarksArrayList.put(university.getId(), university);
                                     } else {
                                         UserAnswer existMark = subjectMarksArrayList.get(university.getId());
-                                        int marks = existMark.getTotalCorrect() + userAnswer.getTotalCorrect();
+                                        int marks = existMark.getTotalCorrect() + quiz.getTotalCorrect();
                                         ArrayList<Quiz> total = existMark.getAnswerQuizList();
-                                        total.addAll(userAnswer.getAnswerQuizList());
+                                        total.addAll(quiz.getAnswerQuizList());
                                         existMark.setTotalCorrect(marks);
                                         existMark.setAnswerQuizList(total);
                                         subjectMarksArrayList.put(university.getId(), existMark);
@@ -117,7 +117,43 @@ public class ProgressFragment extends Fragment {
                                         subjectWithMarksArrayList.put(university.getId(), university);
                                     }
                                 }
+
                             }
+                        }
+
+                        if (university.getQuiz() != null) {
+
+//                            for (String key : university.getQuiz().keySet()) {
+//                                if()
+//                                if (university.getQuiz().get(key).getAnswers() != null && university.getQuiz().get(key).getAnswers().containsKey(FirebaseAuth.getInstance().getUid())) {
+//                                    UserAnswer userAnswer = university.getQuiz().get(key).getAnswers().get(FirebaseAuth.getInstance().getUid());
+//
+//                                    if (!subjectMarksArrayList.containsKey(university.getId())) {
+//                                        UserAnswer existMark = new UserAnswer();
+//                                        existMark.setTotalCorrect(userAnswer.getTotalCorrect());
+//                                        existMark.setAnswerQuizList(userAnswer.getAnswerQuizList());
+//                                        subjectMarksArrayList.put(university.getId(), existMark);
+//                                        subjectWithMarksArrayList.put(university.getId(), university);
+//                                    } else {
+//                                        UserAnswer existMark = subjectMarksArrayList.get(university.getId());
+//                                        int marks = existMark.getTotalCorrect() + userAnswer.getTotalCorrect();
+//                                        ArrayList<Quiz> total = existMark.getAnswerQuizList();
+//                                        total.addAll(userAnswer.getAnswerQuizList());
+//                                        existMark.setTotalCorrect(marks);
+//                                        existMark.setAnswerQuizList(total);
+//                                        subjectMarksArrayList.put(university.getId(), existMark);
+//                                    }
+//                                } else {
+//
+//                                    if (!subjectMarksArrayList.containsKey(university.getId())) {
+//                                        UserAnswer existMark = new UserAnswer();
+//                                        existMark.setTotalCorrect(0);
+//                                        existMark.setAnswerQuizList(new ArrayList<Quiz>());
+//                                        subjectMarksArrayList.put(university.getId(), existMark);
+//                                        subjectWithMarksArrayList.put(university.getId(), university);
+//                                    }
+//                                }
+//                            }
                         }else {
 
                             if (!subjectMarksArrayList.containsKey(university.getId())) {
