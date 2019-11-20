@@ -78,6 +78,7 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         DatabaseReference databaseReference = firebaseDatabase.getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(firebaseAuth.getUid());
 
         StorageReference storageReference = firebaseStorage.getReference();
+        //retrieve user image
         storageReference.child(firebaseAuth.getUid()).child("Images/Profile Pic").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -90,7 +91,9 @@ public class SecondActivity extends AppCompatActivity implements NavigationView.
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                //save user profile to singleton
                 Singleton.getInstance().userProfile = dataSnapshot.getValue(UserProfile.class);
+                //set name and email to drawer
                 navprofileName.setText( Singleton.getInstance().userProfile.getUserName());
                 navprofileEmail.setText( Singleton.getInstance().userProfile.getUserEmail());
 

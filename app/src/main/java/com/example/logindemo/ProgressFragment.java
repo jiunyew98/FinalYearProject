@@ -81,18 +81,26 @@ public class ProgressFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 subjectParentArrayList.clear();
+                //get subject lecturer
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    //get subject subject in lecturer
                     for (DataSnapshot childSnapshot: postSnapshot.getChildren()) {
 
                         SubjectParent university = childSnapshot.getValue(SubjectParent.class);
                         university.setLecturerId(postSnapshot.getKey());
                         subjectParentArrayList.add(university);
+                        //get quiz
                         for(DataSnapshot quizSnapshot : postSnapshot.child(university.getId()).child("quiz").getChildren()){
                             QuizParent quizParent = quizSnapshot.getValue(QuizParent.class);
-
+                            //get quiz answer
                             for(DataSnapshot answerSnapShot : quizSnapshot.child("answer").getChildren()){
                                 UserAnswer quiz = answerSnapShot.getValue(UserAnswer.class);
+                                //check if user got answer the quiz
                                 if (quiz.getId().equals(FirebaseAuth.getInstance().getUid())) {
+                                    //if user answer before add marks into array list
+                                    //to check if same subject has already added marks
+                                    //if yes add new marks with existing marks
+                                    //else straight away put the marks in
                                     if (!subjectMarksArrayList.containsKey(university.getId())) {
                                         UserAnswer existMark = new UserAnswer();
                                         existMark.setTotalCorrect(quiz.getTotalCorrect());
@@ -110,7 +118,7 @@ public class ProgressFragment extends Fragment {
                                     }
                                     quizHashMap.put(university.getId(), quizParent.getId());
                                 } else {
-
+                                    //else put 0
                                     if (!subjectMarksArrayList.containsKey(university.getId())) {
                                         UserAnswer existMark = new UserAnswer();
                                         existMark.setTotalCorrect(0);
@@ -146,8 +154,11 @@ public class ProgressFragment extends Fragment {
             return;
 
         int i = 0;
+        //set value and marks
         for (String key :  subjectMarksArrayList.keySet()){
+            //values
             entries.add(new BarEntry(((Float.valueOf(subjectMarksArrayList.get(key).getTotalCorrect()) / Float.valueOf(subjectMarksArrayList.get(key).getAnswerQuizList().size())) * 100), i));
+            //title
             labels.add(subjectWithMarksArrayList.get(key).getTitle());
             quizWithMarksArrayList.add(key);
             i++;

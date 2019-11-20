@@ -53,7 +53,7 @@ public class SubjectDetailActivity extends AppCompatActivity {
     }
 
     void getSubjectDetail(final SubjectParent subjectParent){
-
+        //get specific quiz based on subject
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.SUBJECT_KEY).child(subjectParent.getLecturerId()).child(subjectParent.getId());
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -62,13 +62,17 @@ public class SubjectDetailActivity extends AppCompatActivity {
                SubjectParent data = dataSnapshot.getValue(SubjectParent.class);
                 ArrayList<QuizParent> quizParents = new ArrayList<>();
 
+                //check if subject got quiz
                 if(data.getQuiz()!=null) {
+
                     for (String key : data.getQuiz().keySet()) {
                         quizParents.add(data.getQuiz().get(key));
                     }
                 }
 
                 data.setLecturerId(subjectParent.getLecturerId());
+
+                //send notes and quiz list into adapter
                 subjectDetailAdapter = new SubjectDetailAdapter(SubjectDetailActivity.this,data, data.getNotesArrayList(),quizParents);
                 subjectDetailAdapter.notifyDataSetChanged();
                 recyclerView.setAdapter(subjectDetailAdapter);

@@ -99,11 +99,13 @@ public class QuizProgressActivity extends Activity {
 //                    }
 //                }
 
+                // loop get quiz
                 for(DataSnapshot quizSnapshot : dataSnapshot.getChildren()){
                     QuizParent quizParent = quizSnapshot.getValue(QuizParent.class);
-
+                    // loop get answer
                     for(DataSnapshot answerSnapShot : quizSnapshot.child("answer").getChildren()){
                         UserAnswer quiz = answerSnapShot.getValue(UserAnswer.class);
+                        //check if user has answered the quiz
                         if (quiz.getId().equals(FirebaseAuth.getInstance().getUid())) {
                             subjectMarksArrayList.put(quizParent.getId(), quiz);
                             titleMarksArrayList.put(quizParent.getId(), quizParent.getTitle());

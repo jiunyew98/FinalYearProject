@@ -53,6 +53,8 @@ public class SubjectFragment extends Fragment {
 
 
     private void getSubjectData() {
+
+        //retrieve user subject parent arraylist
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(FirebaseAuth.getInstance().getUid());
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -60,9 +62,13 @@ public class SubjectFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                 subjectParentArrayList.clear();
+                //check if user has enroll or not
                 if (userProfile.getSubjectParentArrayList() != null)
+                    //run forloop and get every subject
                     for (String postSnapshot : userProfile.getSubjectParentArrayList()) {
+                        //convert string to model
                         SubjectParent subjectParent = new Gson().fromJson(postSnapshot, SubjectParent.class);
+                        //add into array list
                         subjectParentArrayList.add(subjectParent);
                     }
 

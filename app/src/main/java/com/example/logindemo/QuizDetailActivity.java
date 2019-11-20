@@ -53,6 +53,7 @@ public class QuizDetailActivity extends AppCompatActivity {
     private QuizParent quizParent = new QuizParent();
     private SubjectParent subjectParent = new SubjectParent();
 
+    //open from subject detail adapter
     public static Intent newInstance(Context context,SubjectParent subjectParent, QuizParent quizParent){
         Intent intent = new Intent(context,QuizDetailActivity.class);
         intent.putExtra(SUBJECT_KEY, new Gson().toJson(subjectParent));
@@ -70,11 +71,13 @@ public class QuizDetailActivity extends AppCompatActivity {
         setupDetail();
 
         if(getIntent() != null && getIntent().getStringExtra(QUIZ_KEY) != null){
+            //retrieve data that pass into here
             quizParent = new Gson().fromJson(getIntent().getStringExtra(QUIZ_KEY), QuizParent.class);
             subjectParent = new Gson().fromJson(getIntent().getStringExtra(SUBJECT_KEY), SubjectParent.class);
 
             titleET.setText(quizParent.getTitle());
 
+            //add quiz layout
             for(int a= 0; a<quizParent.getQuizArrayList().size(); a++){
                 addLayout(quizParent.getQuizArrayList().get(a));
             }
@@ -105,6 +108,7 @@ public class QuizDetailActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 UserAnswer data = dataSnapshot.getValue(UserAnswer.class);
 
+                //to check if user has already answer the quiz
                 if(data != null){
                     submitQuizButton.setVisibility(View.GONE);
 
@@ -130,6 +134,7 @@ public class QuizDetailActivity extends AppCompatActivity {
         int counter = 0;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference myRef = firebaseDatabase.getReference(KeyTag.SUBJECT_KEY).child(subjectParent.getLecturerId()).child(subjectParent.getId()).child(KeyTag.QUIZ_KEY).child(quizParent.getId()).child(KeyTag.ANSWER_KEY);
+        //get user answer
         for (int a= 0 ; a< childViewList.size() ; a++){
             View childView = childViewList.get(a);
             String question = ((TextView)childView.findViewById(R.id.questionET)).getText().toString();
@@ -137,16 +142,20 @@ public class QuizDetailActivity extends AppCompatActivity {
 
             Boolean studentAnswer = answer == quizParent.getQuizArrayList().get(a).answer;
 
+            //to check how many answer correct
             if(studentAnswer){
                 counter += 1;
             }
 
+            //add into quizList
             quizList.add(new Quiz(question,answer,studentAnswer));
         }
+        //send to database
         UserAnswer quizParent = new UserAnswer(FirebaseAuth.getInstance().getUid(),Singleton.getInstance().userProfile.userName,quizList,counter);
         myRef.child(quizParent.getId()).setValue(quizParent);
         myRef.push();
 
+        //display how many correct answer user answered
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             new AlertDialog.Builder(QuizDetailActivity.this)
                     .setTitle("")
@@ -166,14 +175,13 @@ public class QuizDetailActivity extends AppCompatActivity {
                     .setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            setResult(RESULT_OK);
                             finish();
                             Toast.makeText(QuizDetailActivity.this, "Create Successful", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .show();
         }else{
-            setResult(RESULT_OK);
+            //to close the activity
             finish();
             Toast.makeText(QuizDetailActivity.this, "Create Successful", Toast.LENGTH_SHORT).show();
         }

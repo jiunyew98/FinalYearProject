@@ -35,6 +35,7 @@ public class EnrollDialog extends AppCompatDialogFragment {
                 .setPositiveButton("Enroll", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //confirm enroll
                         sendUserData();
                     }
                 });
@@ -44,16 +45,19 @@ public class EnrollDialog extends AppCompatDialogFragment {
 
     private void sendUserData() {
 
+        //enroll to database
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(FirebaseAuth.getInstance().getUid());
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                //isProfileGet to avoid database keep running because firebase will always run on DataChange once firebase data exchange
                 if(!isProfileGet) {
                     isProfileGet = true;
                     UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+
+                    //push to lecturer subject
                     DatabaseReference myRef = firebaseDatabase.getReference(KeyTag.SUBJECT_KEY).child(subjectParent.getLecturerId());
 
                     if (subjectParent.getStudentArrayList() == null) {
@@ -65,6 +69,7 @@ public class EnrollDialog extends AppCompatDialogFragment {
                     myRef.child(subjectParent.getId()).setValue(subjectParent);
                     myRef.push();
 
+                    //push to user profile
                     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(FirebaseAuth.getInstance().getUid());
                     if (userProfile.getSubjectParentArrayList() == null) {
                         userProfile.setSubjectParentArrayList(new ArrayList<String>());

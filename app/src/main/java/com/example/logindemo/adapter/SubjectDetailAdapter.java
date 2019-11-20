@@ -62,8 +62,10 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
         String text;
         Log.d("###", String.valueOf(getItemViewType(position)));
 
+        //setup view
 
         holder.itemView.setOnClickListener(null);
+        //set title
         if (getItemViewType(position) == TITLE_TYPE) {
             if (notesList != null && position == 0) {
                 text = "Notes";
@@ -71,11 +73,13 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
                 text = "Quiz";
             }
         } else {
+            //set data
             if (notesList == null || position > notesList.size()) {
                 final QuizParent quizParent = notesList != null ? quizList.get(position - (notesList.size() == 0 ? 1 : notesList.size() + 2)) :
                         quizList.get(position - 1);
                 text = quizParent.getTitle();
 
+                //open quiz detail
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -92,6 +96,7 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
 
     @Override
     public int getItemViewType(int position) {
+        //to pass different view
         Log.d("###", "item view type " + position);
         if (position == 0 || (notesList != null && position == notesList.size() + 1)) {
             return TITLE_TYPE;
@@ -103,9 +108,11 @@ public class SubjectDetailAdapter extends RecyclerView.Adapter<SubjectDetailAdap
     // total number of rows
     @Override
     public int getItemCount() {
+        //set item count
         if ((notesList != null && notesList.size() != 0) || (quizList != null && quizList.size() != 0)) {
             int total = 0;
 
+            //plus 1 for title
             if (notesList != null && notesList.size() != 0) {
                 total += notesList.size() + 1;
             }

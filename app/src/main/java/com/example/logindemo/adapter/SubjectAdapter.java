@@ -21,6 +21,7 @@ import java.util.ArrayList;
  * Created by tutlane on 23-08-2017.
  */
 
+//adapter is helping on creating view for list view
 public class SubjectAdapter extends BaseAdapter {
     private ArrayList<SubjectParent> listData;
     private LayoutInflater layoutInflater;
@@ -65,6 +66,8 @@ public class SubjectAdapter extends BaseAdapter {
 
         holder.title.setText(listData.get(position).getTitle());
 
+        //disable enroll button when user has already enroll
+        //if user profile is null, hide enroll button
         if (userProfile != null && userProfile.getSubjectParentArrayList() != null) {
             holder.enrollButton.setVisibility(View.VISIBLE);
             for (String object : userProfile.getSubjectParentArrayList()) {
@@ -80,6 +83,7 @@ public class SubjectAdapter extends BaseAdapter {
         holder.enrollButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check if enroll button is shown
                 if (holder.enrollButton.getVisibility() == View.VISIBLE) {
                     openDialog(listData.get(position));
                 }
@@ -90,7 +94,7 @@ public class SubjectAdapter extends BaseAdapter {
     }
 
     public void openDialog(SubjectParent subjectParent) {
-
+        //pass subject to enroll dialog
         EnrollDialog enrollDialog = new EnrollDialog();
         enrollDialog.subjectParent = subjectParent;
         enrollDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "Dialog Example");

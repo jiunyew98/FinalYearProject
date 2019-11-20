@@ -1,6 +1,7 @@
 package com.example.logindemo;
 
 
+//temporary storage while app is running
 public class Singleton {
     UserProfile userProfile;
 

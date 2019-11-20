@@ -39,26 +39,8 @@ public class EnrollFragment extends Fragment {
 
         listView = (ListView) v.findViewById(R.id.EnrollListView);
 
-        getUserData();
+        getData();
         return v;
-    }
-
-    private void getUserData(){
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(FirebaseAuth.getInstance().getUid());
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                userProfile = dataSnapshot.getValue(UserProfile.class);
-                getData();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(getContext(), error.getCode(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
     private void getData(){
@@ -68,17 +50,19 @@ public class EnrollFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 subjectParentArrayList.clear();
+                //get lecturer list
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    //get subject inside lecturer list
                     for (DataSnapshot childSnapshot: postSnapshot.getChildren()) {
 
                         SubjectParent university = childSnapshot.getValue(SubjectParent.class);
                         university.setLecturerId(postSnapshot.getKey());
-
+                        //add into array list for list view adapter
                         subjectParentArrayList.add(university);
                     }
                 }
 
-                subjectAdapter = new SubjectAdapter(getContext(), subjectParentArrayList,userProfile);
+                subjectAdapter = new SubjectAdapter(getContext(), subjectParentArrayList,Singleton.getInstance().userProfile);
                 listView.setAdapter(subjectAdapter);
                 subjectAdapter.notifyDataSetChanged();
             }
