@@ -39,8 +39,27 @@ public class EnrollFragment extends Fragment {
 
         listView = (ListView) v.findViewById(R.id.EnrollListView);
 
-        getData();
+        getUserData();
         return v;
+    }
+
+    //get user data to refresh user subject parent list
+    private void getUserData(){
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child(KeyTag.USERS_KEY).child(KeyTag.STUDENT_KEY).child(FirebaseAuth.getInstance().getUid());
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userProfile = dataSnapshot.getValue(UserProfile.class);
+                getData();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getContext(), error.getCode(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void getData(){
@@ -62,7 +81,7 @@ public class EnrollFragment extends Fragment {
                     }
                 }
 
-                subjectAdapter = new SubjectAdapter(getContext(), subjectParentArrayList,Singleton.getInstance().userProfile);
+                subjectAdapter = new SubjectAdapter(getContext(), subjectParentArrayList,userProfile);
                 listView.setAdapter(subjectAdapter);
                 subjectAdapter.notifyDataSetChanged();
             }
